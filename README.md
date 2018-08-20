@@ -11,7 +11,7 @@ you can pip install virtualenv and run it in a virtual environment setup
 # How it works
 click on add album link
 To get started, first create a new album. When adding an album cover logo, it's best to have a resolution of at least 512x512 and to use common image formats such as JPG, JPEG, or PNG.
-/home/kevin/Pictures/Workspace 1_002.png
+![workspace 1_002](https://user-images.githubusercontent.com/38653871/44351352-5b6bff00-a4aa-11e8-8c4f-9fd5e3503e2a.png)
 # Add a new song
 after you add an album click on the view detailsbutton to view album details then you will an add new song click on it you
 will be directed to the add son form add only mp3,mp4 files for the song
