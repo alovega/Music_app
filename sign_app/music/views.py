@@ -1,11 +1,15 @@
-from django.views import generic
+from django.http import JsonResponse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
+from django.views import generic
 from django.views.generic import View
 from .models import Album
-from .forms import UserForm
+from .forms import UserForm,SongForm
+
+
+AUDIO_FILE_TYPES = ['wav', 'mp3', 'ogg']
 
 class IndexView(generic.ListView):
     template_name = 'music/index.html'
@@ -25,6 +29,7 @@ class AlbumCreate(CreateView):
     fields = ['artist', 'album', 'genre', 'album_logo']
 
 
+
 class AlbumUpdate(UpdateView):
     model = Album
     fields = ['artist', 'album', 'genre', 'album_logo']
@@ -34,6 +39,45 @@ class AlbumDelete(DeleteView):
     model = Album
     success_url = reverse_lazy('music:index')
 
+
+class SongFormView(View):
+    form_class = SongForm
+    template_name = 'music/song_form.html'
+
+    def get(self, request,album_id):
+        form = self.form_class(None)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self,request,album_id):
+        form = self.form_class(request.POST, request.FILES)
+        album = get_object_or_404(Album, pk=album_id)
+
+        if form.is_valid():
+            albums_songs = album.song_set.all()
+            for s in albums_songs:
+                if s.song_title == form.cleaned_data.get("song_title"):
+                    context = {
+                        'album': album,
+                        'form': form,
+                        'error_message': 'You already added that song',
+                    }
+                    return render(request, 'music/create_song.html', context)
+
+            song = form.save(commit=False)
+            song.album = album
+            song.audio_file = request.FILES['audio_file']
+            file_type = song.audio_file.url.split('.')[-1]
+            file_type = file_type.lower()
+            if file_type not in AUDIO_FILE_TYPES:
+                context = {
+                    'album': album,
+                    'form': form,
+                    'error_message': 'Audio file must be WAV, MP3, or OGG',
+                }
+                return render(request, 'music/create_song.html', context)
+
+            song.save()
+            return render(request, 'music/detail.html', {'album': album})
 
 
 class UserFormView(View):
@@ -69,3 +113,18 @@ class UserFormView(View):
 
         return render(request, self.template_name, {'form':form})
 
+
+class AlbumFavoriteView(View):
+
+    def favorite_album(request, album_id):
+        album = get_object_or_404(Album, pk=album_id)
+        try:
+            if album.is_favorite:
+                album.is_favorite = False
+            else:
+                album.is_favorite = True
+            album.save()
+        except (KeyError, Album.DoesNotExist):
+            return JsonResponse({'success': False})
+        else:
+            return JsonResponse({'success': True})
