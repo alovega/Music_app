@@ -15,5 +15,6 @@ To get started, first create a new album. When adding an album cover logo, it's 
 # Add a new song
 after you add an album click on the view detailsbutton to view album details then you will an add new song click on it you
 will be directed to the add son form add only mp3,mp4 files for the song
-/home/kevin/Pictures/Workspace 1_003.png
+![workspace 1_003](https://user-images.githubusercontent.com/38653871/44351475-a0903100-a4aa-11e8-989c-18d3631995b0.png)
+
 alas you can play your song online
