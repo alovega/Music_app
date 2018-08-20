@@ -6,7 +6,7 @@ Acess the sign_app directory and in the settings.py reconfigure The # Database v
 you can pip install virtualenv and run it in a virtual environment setup
 
 # How the Base Page looks like url:http://127.0.0.1:8000/music/
-/home/kevin/Pictures/Workspace 1_001.png
+[testimage1](/home/kevin/Pictures/Workspace 1_001.png)
 # How it works
 click on add album link
 To get started, first create a new album. When adding an album cover logo, it's best to have a resolution of at least 512x512 and to use common image formats such as JPG, JPEG, or PNG.
